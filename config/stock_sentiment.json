@@ -1,0 +1,9 @@
+{
+  "indicators": {
+    "rsi": {"enabled": true, "weight": 0.4},
+    "volume": {"enabled": true, "weight": 0.25},
+    "pcr": {"enabled": true, "weight": 0.2},
+    "news": {"enabled": true, "weight": 0.15}
+  },
+  "alert_threshold": 30
+}
