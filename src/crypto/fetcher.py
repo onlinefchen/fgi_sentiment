@@ -5,6 +5,14 @@ from typing import List, Dict
 from datetime import datetime
 
 COINGLASS_API_URL = "https://open-api-v4.coinglass.com/api/index/fear-greed-history"
+COINGECKO_BTC_URL = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
+
+
+def fetch_btc_price() -> float:
+    """Fetch real-time BTC price from CoinGecko API."""
+    response = requests.get(COINGECKO_BTC_URL, timeout=10)
+    response.raise_for_status()
+    return float(response.json()["bitcoin"]["usd"])
 
 
 def fetch_fgi_data() -> List[Dict]:

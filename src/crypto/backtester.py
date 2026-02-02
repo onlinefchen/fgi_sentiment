@@ -34,7 +34,7 @@ def backtest(
     signals = []
 
     for i, row in enumerate(filtered_data):
-        if row["fgi_value"] < fgi_threshold:
+        if row["fgi_value"] <= fgi_threshold:
             signal = {
                 "date": row["date"],
                 "fgi": row["fgi_value"],
@@ -61,11 +61,18 @@ def backtest(
     summary = {}
     for target in targets:
         target_key = str(target)
-        days_list = [s["days_to_target"][target_key] for s in signals if s["days_to_target"][target_key] is not None]
+        success_signals = [(s, s["days_to_target"][target_key]) for s in signals if s["days_to_target"][target_key] is not None]
 
-        if days_list:
+        if success_signals:
+            days_list = [d for _, d in success_signals]
+            min_signal = min(success_signals, key=lambda x: x[1])
+            max_signal = max(success_signals, key=lambda x: x[1])
             summary[target_key] = {
                 "avg_days": round(sum(days_list) / len(days_list), 1),
+                "min_days": min(days_list),
+                "max_days": max(days_list),
+                "min_date": min_signal[0]["date"],
+                "max_date": max_signal[0]["date"],
                 "success_count": len(days_list),
                 "total": len(signals),
                 "success_rate": round(len(days_list) / len(signals), 2) if signals else 0
@@ -73,6 +80,10 @@ def backtest(
         else:
             summary[target_key] = {
                 "avg_days": None,
+                "min_days": None,
+                "max_days": None,
+                "min_date": None,
+                "max_date": None,
                 "success_count": 0,
                 "total": len(signals),
                 "success_rate": 0

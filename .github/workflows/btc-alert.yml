@@ -2,7 +2,7 @@ name: BTC FGI Alert
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Every hour
+    - cron: '0 1 * * *'  # Daily at 09:00 UTC+8
   workflow_dispatch:
 
 jobs:
